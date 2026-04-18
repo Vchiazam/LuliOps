@@ -1,3 +1,6 @@
+import { Loader2 } from "lucide-react";
+import { Suspense } from "react";
+
 export default function AuthLayout({
   children,
 }: {
@@ -19,7 +22,15 @@ export default function AuthLayout({
       {/* Right side — Form */}
       <div className="flex items-center col-span-3 justify-center px-4 b border-l-2 b order-[#270536]">
         <div className="w-full max-w-md rounded-xl border border-border/50 bg-card/60 p-6 backdrop-blur">
-          {children}
+          <Suspense
+            fallback={
+              <div className="min-h-screen flex items-center justify-center">
+                <Loader2 className="animate-spin" />
+              </div>
+            }
+          >
+            {children}
+          </Suspense>
         </div>
       </div>
     </div>

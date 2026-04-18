@@ -422,23 +422,6 @@ export default function MonitorsPage() {
             Add a new service or endpoint to monitor
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form
-            onSubmit={form.handleSubmit((v) => {
-              const { current_state, ...payload } = v;
-              // call createMutation.mutate(payload)
-            })}
-            className="grid grid-cols-1 md:grid-cols-12 gap-4"
-          >
-            {/* Form fields similar to previous version - omitted for brevity, use same as before */}
-            {/* ... name, target, type, is_active ... */}
-            <div className="md:col-span-12 flex justify-end">
-              <Button type="submit" disabled={false}>
-                Create Monitor
-              </Button>
-            </div>
-          </form>
-        </CardContent>
       </Card>
 
       {/* Edit Dialog */}

@@ -26,9 +26,11 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const setAuth = useAuthStore((s) => s.setAuth);
+  const router = useRouter();
 
   const form = useForm<LoginInSchema>({
     resolver: zodResolver(loginInSchema),
@@ -39,7 +41,30 @@ export default function LoginPage() {
     mutationFn: authApi.login,
     onSuccess: (res) => {
       setAuth(res.token, res.profile);
+      toast.success("Welcome back!");
       window.location.href = "/dashboard";
+    },
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.message || "Login failed";
+
+      // Special handling for unverified email
+      if (
+        errorMessage.includes("Email Not Verified") ||
+        errorMessage.toLowerCase().includes("verify your email")
+      ) {
+        const email = form.getValues("email");
+
+        toast.error("Please verify your email first", {
+          description: "We sent a new OTP to your email",
+        });
+
+        // Navigate to verify page with email pre-filled
+        router.push(`/verify-email-otp?email=${encodeURIComponent(email)}`);
+        return;
+      }
+
+      // Generic error
+      toast.error(errorMessage);
     },
   });
 
